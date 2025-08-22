@@ -1,0 +1,11 @@
+com\adopcion\AdopcionBackendApplication.class
+com\adopcion\model\Usuario.class
+com\adopcion\controller\UploadController.class
+com\adopcion\repository\UsuarioRepository.class
+com\adopcion\model\Adopcion.class
+com\adopcion\repository\MascotaRepository.class
+com\adopcion\controller\MascotaController.class
+com\adopcion\repository\AdopcionRepository.class
+com\adopcion\controller\AdopcionController.class
+com\adopcion\controller\UsuarioController.class
+com\adopcion\model\Mascota.class

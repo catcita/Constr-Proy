@@ -1,5 +1,9 @@
 const API_BASE = process.env.REACT_APP_API_ADOPTIONS;
 
+if (!API_BASE) {
+	throw new Error('❌ REACT_APP_API_ADOPTIONS is not defined. Check your .env file.');
+}
+
 export async function createAdoption(request) {
   const res = await fetch(`${API_BASE}`, {
     method: 'POST',

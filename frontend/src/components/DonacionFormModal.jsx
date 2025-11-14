@@ -25,7 +25,8 @@ export default function DonacionFormModal({ isOpen, onClose, donanteId }) {
   const loadRefugios = async () => {
     try {
       // Buscar todos los perfiles tipo EMPRESA desde users-service
-      const res = await fetch('https://localhost/api/users/all');
+      // Nota: /all está en la raíz, no bajo /api
+      const res = await fetch(`http://localhost:8081/all`);
       if (res.ok) {
         const allUsers = await res.json();
         // Filtrar solo empresas - los perfiles vienen directamente, no anidados

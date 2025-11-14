@@ -1,5 +1,9 @@
 const API_BASE = process.env.REACT_APP_API_DONATIONS;
 
+if (!API_BASE) {
+	throw new Error('❌ REACT_APP_API_DONATIONS is not defined. Check your .env file.');
+}
+
 // Crear nueva donación
 export async function crearDonacion(donacionData) {
 	try {

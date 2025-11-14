@@ -114,6 +114,9 @@ function LoginPage() {
         <div className="login-logo">
           <img src="/assets/petcloud-logo.png" alt="PetCloud Logo" style={{ width: '120px', height: '120px' }} />
         </div>
+        <div style={{ textAlign: 'center', color: '#F29C6B', fontWeight: 'bold', fontSize: '14px', marginBottom: '10px' }}>
+          🔄 VERSIÓN ACTUALIZADA - 13 NOV 2025 - 02:00 🔄
+        </div>
         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
           <button type="button" onClick={() => {
             setTipoPerfil('PERSONA');

@@ -14,7 +14,12 @@ export function NotificationProvider({ children }) {
     if (!perfilId) return;
     try {
       setLoading(true);
-      const base = process.env.REACT_APP_API_NOTIFICACIONES;
+      const apiNotificaciones = process.env.REACT_APP_API_NOTIFICACIONES;
+      if (!apiNotificaciones) {
+        console.error('❌ REACT_APP_API_NOTIFICACIONES is not defined');
+        return;
+      }
+      const base = apiNotificaciones.replace(/\/$/, '');
       const res = await fetch(`${base}?destinatarioId=${perfilId}`);
       if (!res.ok) return;
       const data = await res.json();
@@ -39,7 +44,12 @@ export function NotificationProvider({ children }) {
 
   const markAsRead = async (id) => {
     try {
-      const base = process.env.REACT_APP_API_NOTIFICACIONES;
+      const apiNotificaciones = process.env.REACT_APP_API_NOTIFICACIONES;
+      if (!apiNotificaciones) {
+        console.error('❌ REACT_APP_API_NOTIFICACIONES is not defined');
+        return;
+      }
+      const base = apiNotificaciones.replace(/\/$/, '');
       const res = await fetch(`${base}/${id}/read`, { method: 'PATCH' });
       if (res.ok) {
         const updated = await res.json();

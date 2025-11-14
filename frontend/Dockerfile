@@ -17,6 +17,10 @@ ENV CHOKIDAR_USEPOLLING=true
 # Disable host check for proxy compatibility
 ENV DANGEROUSLY_DISABLE_HOST_CHECK=true
 
+# Disable all webpack caching
+ENV DISABLE_ESLINT_PLUGIN=true
+ENV GENERATE_SOURCEMAP=false
+
 # Expose React dev server port
 EXPOSE 3000
 

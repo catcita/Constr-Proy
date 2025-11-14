@@ -28,7 +28,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
     CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOriginPatterns(Arrays.asList("http://localhost:3001", "http://localhost:3000", "http://192.168.1.6:3000", "*"));
+    configuration.setAllowedOriginPatterns(Arrays.asList(
+        "http://localhost:3001", 
+        "http://localhost:3000", 
+        "http://192.168.1.6:3000",
+        "https://petscloud.cl",
+        "http://petscloud.cl",
+        "https://*.petscloud.cl",
+        "*"
+    ));
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         configuration.setAllowCredentials(true);

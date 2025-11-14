@@ -8,7 +8,6 @@ import SolicitarAdopcionModal from '../components/SolicitarAdopcionModal';
 import { listReceivedRequestsForMascotas } from '../api/adoptionsApi';
 import { getUserById } from '../api/usersApi';
 import MascotaCard from '../components/MascotaCard';
-import { getApiBase } from '../api/apiBase';
 import { AuthContext } from '../context/AuthContext';
 import './LoginPage.css';
 
@@ -16,7 +15,6 @@ import './LoginPage.css';
 
 function PaginaPrincipal() {
   const { user } = useContext(AuthContext) || {};
-  const PETS_BASE = getApiBase('PETS');
   // Estado para refugios (solo empresa)
   const [refugios, setRefugios] = useState([]);
   const [modalRefugioOpen, setModalRefugioOpen] = useState(false);
@@ -72,8 +70,9 @@ function PaginaPrincipal() {
       if (user && (user.id || (user.perfil && user.perfil.id))) {
         const propietarioId = user.id || (user.perfil && user.perfil.id);
         try {
-            const PETS_BASE = getApiBase('PETS');
-            const response = await fetch(`${PETS_BASE}/mascotas/propietario/${propietarioId}`);
+            const PETS_SERVER_BASE = process.env.REACT_APP_PETS_SERVER_BASE;
+            if (!PETS_SERVER_BASE) throw new Error('REACT_APP_PETS_SERVER_BASE no está definido');
+            const response = await fetch(`${PETS_SERVER_BASE}/api/mascotas/propietario/${propietarioId}`);
           if (response.ok) {
               const data = await response.json();
               const pets = Array.isArray(data) ? data : [];
@@ -151,8 +150,9 @@ function PaginaPrincipal() {
   React.useEffect(() => {
     async function fetchPublicMascotas() {
       try {
-  const PETS_BASE = getApiBase('PETS');
-  const res = await fetch(`${PETS_BASE}/mascotas`);
+        const PETS_SERVER_BASE = process.env.REACT_APP_PETS_SERVER_BASE;
+        if (!PETS_SERVER_BASE) throw new Error('REACT_APP_PETS_SERVER_BASE no está definido');
+        const res = await fetch(`${PETS_SERVER_BASE}/api/mascotas`);
         if (!res.ok) { setPublicMascotas([]); return; }
         const data = await res.json();
         let disponibles = Array.isArray(data) ? data.slice() : [];
@@ -474,7 +474,9 @@ function PaginaPrincipal() {
           if (user && (user.id || (user.perfil && user.perfil.id))) {
             const propietarioId = user.id || (user.perfil && user.perfil.id);
               try {
-              const response = await fetch(`${PETS_BASE}/mascotas/propietario/${propietarioId}`);
+              const PETS_SERVER_BASE = process.env.REACT_APP_PETS_SERVER_BASE;
+              if (!PETS_SERVER_BASE) throw new Error('REACT_APP_PETS_SERVER_BASE no está definido');
+              const response = await fetch(`${PETS_SERVER_BASE}/api/mascotas/propietario/${propietarioId}`);
               if (response.ok) {
                 const data = await response.json();
                 setMascotas(Array.isArray(data) ? data : []);
@@ -497,7 +499,9 @@ function PaginaPrincipal() {
           if (user && (user.id || (user.perfil && user.perfil.id))) {
             const propietarioId = user.id || (user.perfil && user.perfil.id);
               try {
-              const response = await fetch(`${PETS_BASE}/mascotas/propietario/${propietarioId}`);
+              const PETS_SERVER_BASE = process.env.REACT_APP_PETS_SERVER_BASE;
+              if (!PETS_SERVER_BASE) throw new Error('REACT_APP_PETS_SERVER_BASE no está definido');
+              const response = await fetch(`${PETS_SERVER_BASE}/api/mascotas/propietario/${propietarioId}`);
               if (response.ok) {
                 const data = await response.json();
                 setMascotas(Array.isArray(data) ? data : []);

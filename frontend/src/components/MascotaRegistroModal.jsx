@@ -410,8 +410,11 @@ export default function MascotaRegistroModal({ open, onClose, onRegister, isEdit
       if (foto && foto.name) {
         const formData = new FormData();
         formData.append('file', foto);
-        const PETS_BASE = getApiBase('PETS');
-        const uploadResp = await fetch(`${PETS_BASE}/mascotas/upload`, {
+        const PETS_SERVER_BASE = process.env.REACT_APP_PETS_SERVER_BASE;
+        if (!PETS_SERVER_BASE) {
+          throw new Error('❌ REACT_APP_PETS_SERVER_BASE is not defined. Check your .env file.');
+        }
+        const uploadResp = await fetch(`${PETS_SERVER_BASE}/api/mascotas/upload`, {
           method: 'POST',
           body: formData
         });
@@ -436,7 +439,10 @@ export default function MascotaRegistroModal({ open, onClose, onRegister, isEdit
       const mediaUrls = [];
       for (const f of mediaFiles) {
         try {
-          const PETS_BASE = getApiBase('PETS');
+          const PETS_SERVER_BASE = process.env.REACT_APP_PETS_SERVER_BASE;
+          if (!PETS_SERVER_BASE) {
+            throw new Error('❌ REACT_APP_PETS_SERVER_BASE is not defined. Check your .env file.');
+          }
           let uploadFile = f;
           // compress images before upload to avoid 413 and reduce bandwidth
           if (f && f.type && f.type.startsWith('image')) {
@@ -449,7 +455,7 @@ export default function MascotaRegistroModal({ open, onClose, onRegister, isEdit
           }
           const fm = new FormData();
           fm.append('file', uploadFile);
-          const resp = await fetch(`${PETS_BASE}/mascotas/upload`, { method: 'POST', body: fm });
+          const resp = await fetch(`${PETS_SERVER_BASE}/api/mascotas/upload`, { method: 'POST', body: fm });
           if (resp.ok) {
             const url = await resp.text();
             mediaUrls.push({ url, type: (uploadFile && uploadFile.type) ? uploadFile.type : f.type });

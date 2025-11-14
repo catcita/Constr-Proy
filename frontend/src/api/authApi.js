@@ -1,11 +1,17 @@
 import { formatRut } from '../utils/rut';
 
-const API_BASE =
-	window.location.hostname === "localhost"
-		? process.env.REACT_APP_API_USERS
-		: process.env.REACT_APP_API_IP_USERS;
+// ========== UPDATED VERSION 13-NOV-2025 01:59 ==========
+// Helper function to get API_BASE with validation
+function getApiBase() {
+	const API_BASE = process.env.REACT_APP_API_USERS;
+	if (!API_BASE) {
+		throw new Error('❌ REACT_APP_API_USERS is not defined. Check your .env file.');
+	}
+	return API_BASE;
+}
 
 export async function registrarPersona(personaData) {
+	const API_BASE = getApiBase();
 	const payload = { ...personaData };
 	if (payload.rut) payload.rut = formatRut(payload.rut);
 	const response = await fetch(`${API_BASE}/registro-persona`, {
@@ -23,6 +29,7 @@ export async function registrarPersona(personaData) {
 
 // Registro de empresa
 export async function registrarEmpresa(empresaData) {
+	const API_BASE = getApiBase();
 	const formData = new FormData();
 	const copy = { ...empresaData };
 	if (copy.rutEmpresa) copy.rutEmpresa = formatRut(copy.rutEmpresa);
@@ -42,6 +49,7 @@ export async function registrarEmpresa(empresaData) {
 }
 //login, registro
 export async function login(rut, contraseña) {
+	const API_BASE = getApiBase();
 	const payloadRut = formatRut(rut);
 		const response = await fetch(`${API_BASE}/login`, {
 			method: "POST",

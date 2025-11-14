@@ -1,14 +1,18 @@
 services:
-  # Nginx Reverse Proxy with HTTPS
-  nginx:
-    image: nginx:alpine
-    container_name: nginx-proxy
+  # Nginx Proxy Manager with automatic HTTPS/SSL
+  nginx-proxy-manager:
+    image: 'jc21/nginx-proxy-manager:latest'
+    container_name: nginx-proxy-manager
+    restart: unless-stopped
+    environment:
+      TZ: "America/Santiago"
     ports:
-      - "80:80"
-      - "443:443"
+      - "80:80"      # HTTP
+      - "81:81"      # Admin Web UI
+      - "443:443"    # HTTPS
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - ./nginx-proxy-manager/data:/data
+      - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
     networks:
       - app-network
     depends_on:
@@ -17,7 +21,6 @@ services:
       - pets-service
       - adoptions-service
       - donations-service
-    restart: unless-stopped
 
   # Frontend React
   frontend:
@@ -26,7 +29,9 @@ services:
       dockerfile: Dockerfile
     container_name: frontend
     ports:
-      - "3000:3000"
+      - "3000:3000"  # Cambio temporal a 3001 para evitar caché del navegador
+    env_file:
+      - ./frontend/.env
     networks:
       - app-network
     restart: unless-stopped
@@ -37,8 +42,8 @@ services:
       context: ./backend/users-service
       dockerfile: Dockerfile
     container_name: users-service
-    expose:
-      - "8081"
+    ports:
+      - "8081:8081"  # Expuesto para desarrollo localhost
     volumes:
       - ./backend/users-service/data:/app/data
     networks:
@@ -50,8 +55,8 @@ services:
       context: ./backend/pets-service
       dockerfile: Dockerfile
     container_name: pets-service
-    expose:
-      - "8082"
+    ports:
+      - "8082:8082"  # Expuesto para desarrollo localhost
     volumes:
       - ./backend/pets-service/data:/app/data
       - ./backend/pets-service/uploads:/app/uploads
@@ -64,8 +69,8 @@ services:
       context: ./backend/adoptions-service
       dockerfile: Dockerfile
     container_name: adoptions-service
-    expose:
-      - "8083"
+    ports:
+      - "8083:8083"  # Expuesto para desarrollo localhost
     volumes:
       - ./backend/adoptions-service/data:/app/data
     environment:
@@ -79,8 +84,8 @@ services:
       context: ./backend/donations-service
       dockerfile: Dockerfile
     container_name: donations-service
-    expose:
-      - "8084"
+    ports:
+      - "8084:8084"  # Expuesto para desarrollo localhost
     volumes:
       - ./backend/donations-service/data:/app/data
     networks:

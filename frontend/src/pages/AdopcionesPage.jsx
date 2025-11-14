@@ -21,7 +21,11 @@ export default function AdopcionesPage() {
     async function load() {
       setLoading(true);
       try {
-        const API_BASE = PETS_API_BASE || (process.env.REACT_APP_API_BASE_URL || 'http://localhost:8082');
+        const API_BASE = PETS_API_BASE || process.env.REACT_APP_API_PETS;
+        
+        if (!API_BASE) {
+          throw new Error('❌ REACT_APP_API_PETS is not defined. Check your .env file.');
+        }
 
         // Decide qué mostrar según el tipo de perfil:
         // - Si es un refugio/empresa (tipo 'EMPRESA'): mostrar las mascotas del propietario que ya no están disponibles (adoptadas)

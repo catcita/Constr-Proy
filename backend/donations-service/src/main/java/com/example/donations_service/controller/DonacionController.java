@@ -19,7 +19,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/donaciones")
-@CrossOrigin(origins = {"https://localhost", "https://localhost:443", "http://localhost:3000"})
+@CrossOrigin(origins = {"https://localhost", "https://localhost:443", "http://localhost:3000", "https://petscloud.cl", "http://petscloud.cl"})
 public class DonacionController {
     
     private static final Logger log = LoggerFactory.getLogger(DonacionController.class);

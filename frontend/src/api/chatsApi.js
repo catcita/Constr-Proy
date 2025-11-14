@@ -1,5 +1,9 @@
 const API_BASE = process.env.REACT_APP_API_CHATS;
 
+if (!API_BASE) {
+	throw new Error('❌ REACT_APP_API_CHATS is not defined. Check your .env file.');
+}
+
 // Cache perfilIds that returned 404 for participant listing to avoid
 // repeated requests that flood the network while the backend route is missing
 const _notFoundParticipantCache = new Set();

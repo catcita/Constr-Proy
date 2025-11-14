@@ -21,7 +21,9 @@ public class CorsConfig {
             "https://localhost",
             "https://localhost:443",
             "http://localhost:3000",
-            "http://localhost:3001"
+            "http://localhost:3001",
+            "https://petscloud.cl",
+            "http://petscloud.cl"
         ));
         config.setAllowedHeaders(Arrays.asList("*"));
         config.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));

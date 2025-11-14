@@ -7,45 +7,24 @@ function stripTrailingSlash(url) {
   return url ? url.replace(/\/$/, '') : url;
 }
 
-const DEFAULTS = {
-  PETS: 'https://localhost/api/pets',
-  USERS: 'https://localhost/api/users',
-  ADOPTIONS: 'https://localhost/api/adoptions',
-  REFUGIOS: 'https://localhost/api/users'
-};
-
 export function getApiBase(serviceKey) {
-  // global override
+  // Global override takes priority
   const globalBase = process.env.REACT_APP_API_BASE_URL;
   if (globalBase) return stripTrailingSlash(globalBase);
 
   const key = String(serviceKey || '').toUpperCase();
 
-  // decide based on current host
-  let host = '';
-  try {
-    host = window && window.location && window.location.hostname ? window.location.hostname : '';
-  } catch (e) {
-    host = '';
+  // Get service-specific environment variable
+  const serviceEnv = process.env[`REACT_APP_API_${key}`];
+  
+  if (!serviceEnv) {
+    console.error(`❌ FATAL: No environment variable found for service "${serviceKey}".`);
+    console.error(`   Expected: REACT_APP_API_${key} or REACT_APP_API_BASE_URL`);
+    console.error(`   Available env vars:`, Object.keys(process.env).filter(k => k.startsWith('REACT_APP_')));
+    throw new Error(`Missing environment variable REACT_APP_API_${key}`);
   }
 
-  const isLocal = host === 'localhost' || host === '127.0.0.1' || host === '::1';
-
-  const localEnv = process.env[`REACT_APP_API_${key}`];
-  const ipEnv = process.env[`REACT_APP_API_IP_${key}`];
-
-  let resolved = '';
-  if (isLocal) {
-    resolved = localEnv || ipEnv || DEFAULTS[key] || '';
-  } else {
-    resolved = ipEnv || localEnv || DEFAULTS[key] || '';
-  }
-
-  if (!resolved) {
-    console.warn(`getApiBase: no base found for service ${serviceKey}`);
-    return '';
-  }
-  return stripTrailingSlash(resolved);
+  return stripTrailingSlash(serviceEnv);
 }
 
 export default getApiBase;

@@ -578,6 +578,7 @@ export default function MascotaRegistroModal({ open, onClose, onRegister, isEdit
       console.log('Datos que se enviarán al backend:', JSON.stringify(mascotaData, null, 2));
       if (isEdit && initialData && initialData.id) {
         const API_BASE = getApiBase('PETS');
+        console.log('DEBUG: PUT URL:', `${API_BASE}/mascotas/${initialData.id}`);
         const resp = await fetch(`${API_BASE}/mascotas/${initialData.id}`, { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(mascotaData) });
         if (!resp.ok) throw new Error('Error al actualizar mascota');
         // try to read response json to get persisted mascota (controllers return RespuestaRegistro)

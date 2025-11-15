@@ -463,8 +463,7 @@ function PaginaPrincipal() {
               ))
             )}
           </div>
-  </div>
-        )}
+        </div>
       </div>
       {/* Modal de registro de mascota */}
       <MascotaRegistroModal

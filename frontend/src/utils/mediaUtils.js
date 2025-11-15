@@ -9,7 +9,8 @@ export function buildMediaUrl(apiBase, raw) {
         const u = new URL(s, window.location.href);
         // If the absolute URL points to an uploads path, rewrite to proxy endpoint to avoid adblockers
         if (u.pathname && u.pathname.startsWith('/uploads/')) {
-          return `${apiBase}/api/media/${u.pathname.substring('/uploads/'.length)}`;
+          const serverBase = apiBase.replace(/\/api$/, ''); // Remove /api suffix if present
+          return `${serverBase}/api/media/${u.pathname.substring('/uploads/'.length)}`;
         }
         return s;
       } catch (err) {
@@ -21,12 +22,18 @@ export function buildMediaUrl(apiBase, raw) {
     if (s.startsWith('data:') || s.startsWith('blob:')) return s;
     // If already an absolute path starting with /uploads/, map to /api/media/:file
     if (s.startsWith('/uploads/')) {
-      return `${apiBase}/api/media/${s.substring('/uploads/'.length)}`;
+      // apiBase already includes /api, so we construct the full server URL
+      const serverBase = apiBase.replace(/\/api$/, ''); // Remove /api suffix if present
+      return `${serverBase}/api/media/${s.substring('/uploads/'.length)}`;
     }
     // If starts with any other absolute path, just prefix API base
-    if (s.startsWith('/')) return `${apiBase}${s}`;
+    if (s.startsWith('/')) {
+      const serverBase = apiBase.replace(/\/api$/, '');
+      return `${serverBase}${s}`;
+    }
     // Otherwise assume it's a filename stored in uploads and map to proxy endpoint
-    return `${apiBase}/api/media/${s}`;
+    const serverBase = apiBase.replace(/\/api$/, '');
+    return `${serverBase}/api/media/${s}`;
   } catch (e) {
     return '';
   }
